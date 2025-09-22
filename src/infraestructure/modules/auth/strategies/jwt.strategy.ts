@@ -7,17 +7,18 @@ import {
 
 import { AuthDto } from 'src/application/commands/dtos/auth.dto';
 import { PassportStrategy } from '@nestjs/passport';
-import { SECRET_KEYJWT } from 'src/infraestructure/config/constants/jwt';
 import { UserDao } from 'src/domain/user/dao/dao-user';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private _userDao: UserDao,
+    private configService: ConfigService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: SECRET_KEYJWT
+      secretOrKey: configService.get('SECRET_KEYJWT')
     });
   }
 

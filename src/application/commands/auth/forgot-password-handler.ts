@@ -4,15 +4,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthForgotPasswordDto } from '../dtos/auth.dto';
 import { UserDao } from 'src/domain/user/dao/dao-user';
 import { JwtService } from '@nestjs/jwt';
-import { SECRET_RESET_PASSWORD } from 'src/infraestructure/config/constants/jwt';
+import { ConfigService } from '@nestjs/config';
 import { MailService } from 'src/infraestructure/modules/mail/services/mail.service';
+import { EnvVariables } from 'src/infraestructure/env/env-variables.enum';
 
 @Injectable()
 export class ForgotPasswordHandler {
   constructor(
     private _userDao: UserDao,
     private _mailService: MailService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private configService: ConfigService
   ) {}
 
   public async execute(dataForgotPassword: AuthForgotPasswordDto): Promise<{
@@ -27,7 +29,7 @@ export class ForgotPasswordHandler {
 
     const token = this.jwtService.sign(
       { sub: user.id, email: user.email },
-      { secret: SECRET_RESET_PASSWORD, expiresIn: '5m' }
+      { secret: this.configService.get(EnvVariables.SECRET_RESET_PASSWORD), expiresIn: '5m' }
     );
 
     await this._mailService.sendResetPassword(user.email, token);

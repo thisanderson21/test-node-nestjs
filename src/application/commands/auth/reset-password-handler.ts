@@ -5,12 +5,15 @@ import { RepositoryUser } from "src/domain/user/repository/repository-user";
 import {
   compare, hash
 } from 'bcrypt';
+import { ConfigService } from "@nestjs/config";
+import { EnvVariables } from "src/infraestructure/env/env-variables.enum";
 
 @Injectable()
 export class ResetPasswordHandler  {
   constructor(
     private _userRepository: RepositoryUser,
     private jwtService: JwtService,
+    private configService: ConfigService
   ) {}
 
   async execute(token: string, newPassword: string): Promise<{
@@ -18,7 +21,7 @@ export class ResetPasswordHandler  {
   }> {
     try {
       const payload = this.jwtService.verify(token, {
-        secret: process.env.RESET_SECRET,
+        secret: this.configService.get(EnvVariables.SECRET_RESET_PASSWORD),
       });
       const hashed = await hash(newPassword, 10);
       await this._userRepository.updatePassword(payload.sub, hashed);
