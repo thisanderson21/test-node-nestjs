@@ -17,6 +17,7 @@ async function bootstrap() {
   app.enableCors();
   
   app.setGlobalPrefix(configService.get(EnvVariables.APPLICATION_CONTEXT_PATH));
+
   console.log('LISTENING ON PORT: ', port);
   await app.listen(port);
 }
