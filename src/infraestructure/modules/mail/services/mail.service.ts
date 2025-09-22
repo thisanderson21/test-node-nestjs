@@ -25,7 +25,7 @@ export class MailService {
   async sendResetPassword(email: string, token: string) {
     console.log(this.configService.get('MAIL_USER'),'MAIL_USER');
     console.log(this.configService.get('MAIL_PASS'),'MAIL_PASS');
-    const resetUrl = `http://localhost:4000/reset-password?token=${token}`;
+    const resetUrl = `http://localhost:4000/api/auth/reset-password?token=${token}`;
     await this.transporter.sendMail({
       from: '"Mi App" <andersonvargas383@gmail.com>',
       to: email,

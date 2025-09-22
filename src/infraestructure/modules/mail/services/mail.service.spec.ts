@@ -58,7 +58,7 @@ describe('MailService', () => {
       to: email,
       subject: 'Recupera tu contraseña',
       html: `<p>Haz clic en este enlace para resetear tu contraseña:</p>
-             <a href="http://localhost:4000/reset-password?token=${token}">http://localhost:4000/reset-password?token=${token}</a>`,
+             <a href="http://localhost:4000/api/auth/reset-password?token=${token}">http://localhost:4000/api/auth/reset-password?token=${token}</a>`,
     });
   });
 });
