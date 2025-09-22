@@ -9,6 +9,7 @@ export class S3Service {
   private readonly bucketName: string;
 
   constructor(private readonly configService: ConfigService) {
+
     this.s3Client = new S3Client({
       region: this.configService.get('AWS_REGION'),
       credentials: {
@@ -20,6 +21,12 @@ export class S3Service {
   }
 
   async uploadFile(key: string, body: Buffer, contentType: string): Promise<boolean> {
+
+    console.log('AWS_REGION ->', this.configService.get('AWS_REGION'), );
+    console.log('AWS_ACCESS_KEY_ID ->', this.configService.get('AWS_ACCESS_KEY_ID'),);
+    console.log('AWS_SECRET_ACCESS_KEY ->', this.configService.get('AWS_SECRET_ACCESS_KEY'),);
+    console.log('AWS_S3_BUCKET_NAME ->', this.configService.get('AWS_S3_BUCKET_NAME'),);
+    
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
